@@ -1,0 +1,87 @@
+<div *ngIf = "!editing">
+  <h1>Add new Todo item</h1>
+  <div class = "add">
+    <form (submit)="addTodo()" #todoForm="ngForm">
+      <div *ngIf="error" class = "alert">Fields can not be empty</div>
+      <div class="form-group">
+        <label for="title">Title:</label><br />
+        <input type="text"
+              id = "title"
+              [(ngModel)] = "model.title"
+              class= "form-control"
+              name = "title"><br />
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label><br />
+        <input type="text"
+              id = "description"
+              [(ngModel)] = "model.description"
+              name="description"/><br />
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+
+<div *ngIf = "editing">
+    <h1>Edit Todo Item</h1>
+    <div class = "add">
+      <form (submit)="updateTodo(model.id)" #todoForm="ngForm">
+        <div *ngIf="error" class = "alert">Fields can not be empty</div>
+        <div class="form-group">
+          <label for="title">Title:</label><br />
+          <input type="text"
+                id = "title"
+                [(ngModel)] = "model.title"
+                class= "form-control"
+                name = "title"><br />
+        </div>
+        <div class="form-group">
+          <label for="description">Description:</label><br />
+          <input type="text"
+                id = "description"
+                [(ngModel)] = "model.description"
+                name="description"/><br />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+<br/><hr/><br/>
+
+<div class="container">
+  <div class="filter">
+    <h2>Filter by:</h2>
+    <form (change)="filterList()" #filterForm="ngForm">
+      <label>Title:</label><br />
+      <input type="text"
+             [(ngModel)] = "filter.title"
+             class= "form-control"
+             name = "title" /><br />
+      <label>Date:</label><br/>
+      <select [(ngModel)]="filter.selectedDate" name = "filter">
+        <option></option>
+        <option *ngFor="let d of dates" [ngValue]="d">{{d}}</option>
+      </select>
+    </form>
+  </div>
+
+  <div class="todos">
+    <div class="wrapper">
+      <div class="content" *ngFor = "let t of filtredList | paginate: { itemsPerPage: 12, currentPage: p }">
+        <h3>{{t.title}}</h3>
+        <i class="fa fa-pencil edit" aria-hidden="true" (click)="editTodo(t.id)"></i>
+        <i class="fa fa-trash delete" aria-hidden="true" (click)="deleteTodo(t.id)"></i>
+        <p>{{t.description}}</p>
+        <p>Added: {{t.created_at}}</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="center">
+  <pagination-controls (pageChange)="p = $event" previousLabel="" nextLabel=""></pagination-controls>
+</div>
+
+
+
